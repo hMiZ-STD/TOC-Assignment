@@ -23,7 +23,7 @@ two completely different parse trees for the same input and ruins your entire co
 ---
 
 ## 🎬 Live Demo
-[**🚀 Live Demo**](https://hMiZ-STD.github.io/TOC-Assignment/)
+[** Open this **](https://hMiZ-STD.github.io/TOC-Assignment/)
 
 ---
 
