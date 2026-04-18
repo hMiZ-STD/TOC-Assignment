@@ -1,199 +1,419 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>TOC Lab - Ambiguity Simulator</title>
-  <link rel="stylesheet" href="./styles/base.css">
-  <link rel="stylesheet" href="./styles/layout.css">
-  <link rel="stylesheet" href="./styles/components.css">
-  <link rel="stylesheet" href="./styles/modules/ambiguity.css">
-</head>
-<body>
-  <div class="app-shell" data-app-root>
-    <aside class="sidebar">
-      <div class="brand-block">
-        <p class="eyebrow">TOC Lab</p>
-        <h1 class="brand-title">CFG Ambiguity Simulator</h1>
-        <p class="brand-copy">Explore how one grammar can generate multiple valid parse trees.</p>
-      </div>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>TOC Lab - Ambiguity Simulator</title>
+    <link rel="stylesheet" href="./styles/base.css" />
+    <link rel="stylesheet" href="./styles/layout.css" />
+    <link rel="stylesheet" href="./styles/components.css" />
+    <link rel="stylesheet" href="./styles/modules/ambiguity.css" />
+  </head>
+  <body>
+    <!-- Skip link for keyboard/screen reader users -->
+    <a class="skip-link" href="#main-content">Skip to main content</a>
 
-      <nav class="case-nav" aria-label="Ambiguity case studies">
-        <p class="section-label">Lesson Navigator</p>
-        <button class="nav-button is-active" type="button" data-case-key="precedence"></button>
-        <button class="nav-button" type="button" data-case-key="dangling"></button>
-        <button class="nav-button" type="button" data-case-key="epsilon"></button>
-        <button class="nav-button" type="button" data-case-key="associativity"></button>
-        <button class="nav-button" type="button" data-case-key="concatenation"></button>
-        <button class="nav-button" type="button" data-case-key="language"></button>
-      </nav>
-    </aside>
-
-    <main class="main-panel">
-      <section class="toolbar card-surface">
-        <div>
-          <p class="section-label">Case Study</p>
-          <h2 id="module-title">Operator Precedence Trap</h2>
+    <div class="app-shell" data-app-root>
+      <aside class="sidebar">
+        <div class="brand-block">
+          <p class="eyebrow">TOC Lab</p>
+          <h1 class="brand-title">CFG Ambiguity Simulator</h1>
+          <p class="brand-copy">
+            Explore how one grammar can generate multiple valid parse trees.
+          </p>
         </div>
-        <div class="toolbar-actions">
-          <label id="compare-controls" class="toggle-field" for="compare-mode">
-            <span>Compare Mode</span>
-            <input id="compare-mode" type="checkbox" checked>
-          </label>
-          <button id="theme-toggle" class="action-button" type="button" aria-pressed="false">Switch to dark theme</button>
-        </div>
-      </section>
 
-      <section id="app-error" class="status-banner is-hidden" aria-live="polite"></section>
+        <nav class="case-nav" aria-label="Ambiguity case studies">
+          <p class="section-label">Lesson Navigator</p>
+          <button
+            class="nav-button is-active"
+            type="button"
+            data-case-key="precedence"
+          ></button>
+          <button
+            class="nav-button"
+            type="button"
+            data-case-key="dangling"
+          ></button>
+          <button
+            class="nav-button"
+            type="button"
+            data-case-key="epsilon"
+          ></button>
+          <button
+            class="nav-button"
+            type="button"
+            data-case-key="associativity"
+          ></button>
+          <button
+            class="nav-button"
+            type="button"
+            data-case-key="concatenation"
+          ></button>
+          <button
+            class="nav-button"
+            type="button"
+            data-case-key="language"
+          ></button>
+        </nav>
+      </aside>
 
-      <section id="ambiguity-module" class="module-view">
-      <section class="card-surface progress-card">
-        <div class="progress-grid">
-          <article class="progress-item">
-            <p class="section-label">Visited</p>
-            <p id="progress-visited" class="progress-value"></p>
-          </article>
-          <article class="progress-item">
-            <p class="section-label">Quiz Score</p>
-            <p id="progress-quiz-score" class="progress-value"></p>
-          </article>
-          <article class="progress-item">
-            <p class="section-label">Quiz Attempted</p>
-            <p id="progress-quiz-attempted" class="progress-value"></p>
-          </article>
-        </div>
-      </section>
-
-      <section class="card-surface editor-card">
-        <div class="editor-header">
+      <main class="main-panel" id="main-content">
+        <section class="toolbar card-surface">
           <div>
-            <p class="section-label">Editable Input</p>
-            <h3 class="section-title">Test a grammar and input string</h3>
+            <p class="section-label">Case Study</p>
+            <h2 id="module-title">Operator Precedence Trap</h2>
           </div>
-        </div>
+          <div class="toolbar-actions">
+            <label
+              id="compare-controls"
+              class="toggle-field"
+              for="compare-mode"
+            >
+              <span>Compare Mode</span>
+              <input id="compare-mode" type="checkbox" checked />
+            </label>
 
-        <form id="grammar-form" class="editor-form" novalidate>
-          <label class="field-group" for="grammar-input">
-            <span class="field-label">Grammar</span>
-            <textarea id="grammar-input" class="text-input mono-input" rows="4" spellcheck="false"></textarea>
-          </label>
-          <section id="grammar-error" class="panel-error is-hidden" aria-live="polite"></section>
+            <!-- Playback speed slider -->
+            <label class="speed-field" for="speed-slider">
+              <span>Speed</span>
+              <input
+                id="speed-slider"
+                type="range"
+                min="0.25"
+                max="2"
+                step="0.25"
+                value="1"
+                aria-label="Playback speed"
+              />
+              <span id="speed-label">1×</span>
+            </label>
 
-          <label class="field-group" for="string-input">
-            <span class="field-label">Input String</span>
-            <input id="string-input" class="text-input mono-input" type="text" spellcheck="false">
-          </label>
-
-          <div class="editor-actions">
-            <button class="action-button" type="submit">Apply Input</button>
+            <button
+              id="theme-toggle"
+              class="action-button"
+              type="button"
+              aria-pressed="false"
+            >
+              Switch to dark theme
+            </button>
           </div>
-        </form>
-      </section>
+        </section>
 
-      <section class="overview-grid">
-        <article class="card-surface info-card">
-          <p class="section-label">Grammar</p>
-          <code id="grammar-display" class="mono-block">E -> E + E | E * E | id</code>
-        </article>
-        <article class="card-surface info-card">
-          <p class="section-label">Input String</p>
-          <code id="string-display" class="mono-block">id + id * id</code>
-          <p id="case-teaser" class="body-copy"></p>
-        </article>
-      </section>
+        <section
+          id="app-error"
+          class="status-banner is-hidden"
+          aria-live="polite"
+        ></section>
 
-      <section id="canvas-area" class="canvas-grid">
-        <article id="interp-a" class="card-surface interpretation-panel">
-          <div class="panel-heading">
-            <h3>Interpretation A</h3>
-            <p id="label-a" class="panel-label">(id + id) * id</p>
-          </div>
-          <div class="derivation-controls" aria-label="Interpretation A derivation controls">
-            <div class="control-row">
-              <button id="prev-a" class="action-button" type="button">Prev</button>
-              <button id="play-a" class="action-button" type="button">Play</button>
-              <button id="next-a" class="action-button" type="button">Next</button>
+        <section id="ambiguity-module" class="module-view">
+          <!-- Lesson stage bar -->
+          <section
+            id="lesson-bar"
+            class="card-surface lesson-bar is-hidden"
+            aria-label="Lesson stage"
+          >
+            <div class="lesson-bar-header">
+              <p id="lesson-stage-title" class="section-label"></p>
+              <div class="lesson-bar-actions">
+                <button
+                  id="lesson-prev"
+                  class="action-button"
+                  type="button"
+                  disabled
+                >
+                  ← Prev
+                </button>
+                <button id="lesson-next" class="action-button" type="button">
+                  Next →
+                </button>
+              </div>
             </div>
-            <p id="step-counter-a" class="step-counter">Step 1 of 1</p>
-          </div>
-          <section id="error-a" class="panel-error is-hidden" aria-live="polite"></section>
-          <div id="mermaid-a" class="diagram-stage">
-            <p class="empty-state">Rendering diagram A...</p>
-          </div>
-          <div class="derivation-step">
-            <p class="section-label">Current Derivation Step</p>
-            <p id="step-text-a" class="body-copy"></p>
-          </div>
-          <p id="explanation-a" class="panel-copy"></p>
-        </article>
-
-        <article id="interp-b" class="card-surface interpretation-panel">
-          <div class="panel-heading">
-            <h3>Interpretation B</h3>
-            <p id="label-b" class="panel-label">id + (id * id)</p>
-          </div>
-          <div class="derivation-controls" aria-label="Interpretation B derivation controls">
-            <div class="control-row">
-              <button id="prev-b" class="action-button" type="button">Prev</button>
-              <button id="play-b" class="action-button" type="button">Play</button>
-              <button id="next-b" class="action-button" type="button">Next</button>
+            <p id="lesson-stage-prompt" class="body-copy"></p>
+            <div
+              class="lesson-progress-track"
+              role="progressbar"
+              aria-valuemin="0"
+              aria-valuemax="100"
+            >
+              <div
+                id="lesson-progress-fill"
+                class="lesson-progress-fill"
+                style="width: 0%"
+              ></div>
             </div>
-            <p id="step-counter-b" class="step-counter">Step 1 of 1</p>
-          </div>
-          <section id="error-b" class="panel-error is-hidden" aria-live="polite"></section>
-          <div id="mermaid-b" class="diagram-stage">
-            <p class="empty-state">Rendering diagram B...</p>
-          </div>
-          <div class="derivation-step">
-            <p class="section-label">Current Derivation Step</p>
-            <p id="step-text-b" class="body-copy"></p>
-          </div>
-          <p id="explanation-b" class="panel-copy"></p>
-        </article>
-      </section>
+          </section>
 
-      <section id="practice-card" class="card-surface practice-card">
-        <div class="practice-header">
-          <div>
-            <p class="section-label">Practice Mode</p>
-            <h3 class="section-title">Check your understanding</h3>
-          </div>
-          <p id="practice-progress" class="practice-progress">Question 1 of 1</p>
-        </div>
+          <section class="card-surface progress-card">
+            <div class="progress-grid">
+              <article class="progress-item">
+                <p class="section-label">Visited</p>
+                <p id="progress-visited" class="progress-value"></p>
+              </article>
+              <article class="progress-item">
+                <p class="section-label">Quiz Score</p>
+                <p id="progress-quiz-score" class="progress-value"></p>
+              </article>
+              <article class="progress-item">
+                <p class="section-label">Quiz Attempted</p>
+                <p id="progress-quiz-attempted" class="progress-value"></p>
+              </article>
+              <article class="progress-item">
+                <button
+                  id="progress-reset"
+                  class="action-button action-button--ghost"
+                  type="button"
+                >
+                  Reset Progress
+                </button>
+              </article>
+            </div>
+          </section>
 
-        <section id="practice-question-view" class="practice-view">
-          <p id="practice-question" class="practice-question"></p>
-          <div id="practice-options" class="practice-options" role="radiogroup" aria-label="Practice answers"></div>
-          <div class="practice-actions">
-            <button id="practice-submit" class="action-button" type="button">Answer</button>
+          <section class="card-surface editor-card">
+            <div class="editor-header">
+              <div>
+                <p class="section-label">Editable Input</p>
+                <h3 class="section-title">Test a grammar and input string</h3>
+              </div>
+            </div>
+
+            <form id="grammar-form" class="editor-form" novalidate>
+              <label class="field-group" for="grammar-input">
+                <span class="field-label">Grammar</span>
+                <textarea
+                  id="grammar-input"
+                  class="text-input mono-input"
+                  rows="4"
+                  spellcheck="false"
+                  aria-describedby="grammar-error"
+                ></textarea>
+              </label>
+              <section
+                id="grammar-error"
+                class="panel-error is-hidden"
+                aria-live="polite"
+              ></section>
+
+              <label class="field-group" for="string-input">
+                <span class="field-label">Input String</span>
+                <input
+                  id="string-input"
+                  class="text-input mono-input"
+                  type="text"
+                  spellcheck="false"
+                />
+              </label>
+
+              <div class="editor-actions">
+                <button class="action-button" type="submit">Apply Input</button>
+              </div>
+            </form>
+          </section>
+
+          <section class="overview-grid">
+            <article class="card-surface info-card">
+              <p class="section-label">Grammar</p>
+              <code id="grammar-display" class="mono-block"
+                >E -> E + E | E * E | id</code
+              >
+            </article>
+            <article class="card-surface info-card">
+              <p class="section-label">Input String</p>
+              <code id="string-display" class="mono-block">id + id * id</code>
+              <p id="case-teaser" class="body-copy"></p>
+            </article>
+          </section>
+
+          <!-- Mobile panel tab switcher (hidden in compare mode off) -->
+          <div
+            class="mobile-tabs"
+            role="tablist"
+            aria-label="Interpretation panels"
+          >
+            <button
+              id="tab-a"
+              class="mobile-tab is-active"
+              type="button"
+              role="tab"
+              aria-selected="true"
+              aria-controls="interp-a"
+            >
+              Interpretation A
+            </button>
+            <button
+              id="tab-b"
+              class="mobile-tab"
+              type="button"
+              role="tab"
+              aria-selected="false"
+              aria-controls="interp-b"
+            >
+              Interpretation B
+            </button>
           </div>
+
+          <section id="canvas-area" class="canvas-grid">
+            <article
+              id="interp-a"
+              class="card-surface interpretation-panel"
+              role="tabpanel"
+              aria-labelledby="tab-a"
+            >
+              <div class="panel-heading">
+                <h3>Interpretation A</h3>
+                <p id="label-a" class="panel-label">(id + id) * id</p>
+              </div>
+              <div
+                class="derivation-controls"
+                aria-label="Interpretation A derivation controls"
+              >
+                <div class="control-row">
+                  <button id="prev-a" class="action-button" type="button">
+                    Prev
+                  </button>
+                  <button id="play-a" class="action-button" type="button">
+                    Play
+                  </button>
+                  <button id="next-a" class="action-button" type="button">
+                    Next
+                  </button>
+                </div>
+                <p id="step-counter-a" class="step-counter">Step 1 of 1</p>
+              </div>
+              <section
+                id="error-a"
+                class="panel-error is-hidden"
+                aria-live="polite"
+              ></section>
+              <div id="mermaid-a" class="diagram-stage">
+                <p class="empty-state">Rendering diagram A...</p>
+              </div>
+              <div class="derivation-step">
+                <p class="section-label">Current Derivation Step</p>
+                <p id="step-text-a" class="body-copy"></p>
+              </div>
+              <p id="explanation-a" class="panel-copy"></p>
+            </article>
+
+            <article
+              id="interp-b"
+              class="card-surface interpretation-panel"
+              role="tabpanel"
+              aria-labelledby="tab-b"
+            >
+              <div class="panel-heading">
+                <h3>Interpretation B</h3>
+                <p id="label-b" class="panel-label">id + (id * id)</p>
+              </div>
+              <div
+                class="derivation-controls"
+                aria-label="Interpretation B derivation controls"
+              >
+                <div class="control-row">
+                  <button id="prev-b" class="action-button" type="button">
+                    Prev
+                  </button>
+                  <button id="play-b" class="action-button" type="button">
+                    Play
+                  </button>
+                  <button id="next-b" class="action-button" type="button">
+                    Next
+                  </button>
+                </div>
+                <p id="step-counter-b" class="step-counter">Step 1 of 1</p>
+              </div>
+              <section
+                id="error-b"
+                class="panel-error is-hidden"
+                aria-live="polite"
+              ></section>
+              <div id="mermaid-b" class="diagram-stage">
+                <p class="empty-state">Rendering diagram B...</p>
+              </div>
+              <div class="derivation-step">
+                <p class="section-label">Current Derivation Step</p>
+                <p id="step-text-b" class="body-copy"></p>
+              </div>
+              <p id="explanation-b" class="panel-copy"></p>
+            </article>
+          </section>
+
+          <section id="practice-card" class="card-surface practice-card">
+            <div class="practice-header">
+              <div>
+                <p class="section-label">Practice Mode</p>
+                <h3 class="section-title">Check your understanding</h3>
+              </div>
+              <p id="practice-progress" class="practice-progress">
+                Question 1 of 1
+              </p>
+            </div>
+
+            <section id="practice-question-view" class="practice-view">
+              <p id="practice-question" class="practice-question"></p>
+              <div
+                id="practice-options"
+                class="practice-options"
+                role="radiogroup"
+                aria-label="Practice answers"
+              ></div>
+              <div class="practice-actions">
+                <button
+                  id="practice-submit"
+                  class="action-button"
+                  type="button"
+                >
+                  Answer
+                </button>
+              </div>
+            </section>
+
+            <section
+              id="practice-feedback-view"
+              class="practice-view is-hidden"
+            >
+              <section
+                id="practice-feedback"
+                class="practice-feedback"
+                aria-live="polite"
+              ></section>
+              <p id="practice-hint" class="body-copy"></p>
+              <p id="practice-explanation" class="body-copy"></p>
+              <div class="practice-actions">
+                <button id="practice-next" class="action-button" type="button">
+                  Next
+                </button>
+              </div>
+            </section>
+
+            <section id="practice-score-view" class="practice-view is-hidden">
+              <p id="practice-score" class="practice-score"></p>
+              <div class="practice-actions">
+                <button
+                  id="practice-restart"
+                  class="action-button"
+                  type="button"
+                >
+                  Restart
+                </button>
+              </div>
+            </section>
+          </section>
         </section>
+      </main>
+    </div>
 
-        <section id="practice-feedback-view" class="practice-view is-hidden">
-          <section id="practice-feedback" class="practice-feedback" aria-live="polite"></section>
-          <p id="practice-hint" class="body-copy"></p>
-          <p id="practice-explanation" class="body-copy"></p>
-          <div class="practice-actions">
-            <button id="practice-next" class="action-button" type="button">Next</button>
-          </div>
-        </section>
+    <div
+      id="glossary-tooltip"
+      class="glossary-tooltip is-hidden"
+      role="tooltip"
+      aria-hidden="true"
+    >
+      <p id="glossary-tooltip-title" class="glossary-tooltip-title"></p>
+      <p id="glossary-tooltip-body" class="glossary-tooltip-body"></p>
+    </div>
 
-        <section id="practice-score-view" class="practice-view is-hidden">
-          <p id="practice-score" class="practice-score"></p>
-          <div class="practice-actions">
-            <button id="practice-restart" class="action-button" type="button">Restart</button>
-          </div>
-        </section>
-      </section>
-      </section>
-    </main>
-  </div>
-
-  <div id="glossary-tooltip" class="glossary-tooltip is-hidden" role="tooltip" aria-hidden="true">
-    <p id="glossary-tooltip-title" class="glossary-tooltip-title"></p>
-    <p id="glossary-tooltip-body" class="glossary-tooltip-body"></p>
-  </div>
-
-  <script type="module" src="./app.js"></script>
-</body>
+    <script type="module" src="./app.js"></script>
+  </body>
 </html>

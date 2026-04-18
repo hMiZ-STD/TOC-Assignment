@@ -1,20 +1,25 @@
 /**
  * @file mermaid-wrapper.js
  * @module MermaidWrapper
- * @description Initializes Mermaid and renders diagrams with visible failure handling.
+ * @description Initializes Mermaid once per theme change. Avoids redundant re-init.
  */
 
 import mermaid from "https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs";
+
+let currentTheme = null;
 
 function getMermaidTheme(theme) {
   return theme === "dark" ? "dark" : "default";
 }
 
 export function configureMermaid(theme) {
+  const nextTheme = getMermaidTheme(theme);
+  if (nextTheme === currentTheme) return; // skip redundant init
+  currentTheme = nextTheme;
   mermaid.initialize({
     startOnLoad: false,
     securityLevel: "loose",
-    theme: getMermaidTheme(theme),
+    theme: currentTheme,
   });
 }
 

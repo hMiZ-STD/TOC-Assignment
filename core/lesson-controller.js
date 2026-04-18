@@ -1,64 +1,67 @@
 /**
  * @file lesson-controller.js
  * @module LessonController
- * @description Manages guided-lesson progression separately from derivation playback.
+ * @description Manages guided-lesson stage progression. Now fully wired into app.js.
  */
 
-const BASE_STATE = {
-  caseId: null,
-  currentStage: 0,
-  autoPlay: false,
-  isCustomGrammar: false,
-  predictionState: {
-    answered: false,
-    selected: null,
-    wasCorrect: false,
-  },
-  derivationCursor: {
-    interpretation: "A",
-    step: 0,
-    autoPlaying: false,
-  },
-  comparisonExpanded: false,
-  fixRevealed: false,
-  practiceState: {
-    active: false,
-    answers: [],
-    score: null,
-  },
-};
+const BUILT_IN_STAGE_IDS = [
+  "setup",
+  "prediction",
+  "walkA",
+  "walkB",
+  "split",
+  "diagnosis",
+  "fix",
+  "practice",
+];
+
+const TOTAL_STAGES = BUILT_IN_STAGE_IDS.length; // 8
 
 function createBaseState() {
   return {
-    ...BASE_STATE,
-    predictionState: { ...BASE_STATE.predictionState },
-    derivationCursor: { ...BASE_STATE.derivationCursor },
-    practiceState: {
-      ...BASE_STATE.practiceState,
-      answers: [...BASE_STATE.practiceState.answers],
-    },
+    caseId: null,
+    currentStage: 0,
+    isCustomGrammar: false,
+    predictionState: { answered: false, selected: null, wasCorrect: false },
+    comparisonExpanded: false,
+    fixRevealed: false,
   };
 }
 
 export const LessonController = {
   state: createBaseState(),
 
-  goToStage(stageIndex, totalStages = 8) {
-    const safeMax = Math.max(0, totalStages - 1);
-    this.state.currentStage = Math.min(Math.max(stageIndex, 0), safeMax);
-    this.state.derivationCursor.interpretation = this.state.currentStage === 3 ? "B" : "A";
+  goToStage(stageIndex) {
+    this.state.currentStage = Math.min(
+      Math.max(stageIndex, 0),
+      TOTAL_STAGES - 1,
+    );
     this.state.comparisonExpanded = this.state.currentStage === 4;
     this.state.fixRevealed = this.state.currentStage >= 6;
-    this.state.practiceState.active = this.state.currentStage === 7;
     return this.state.currentStage;
   },
 
-  nextStage(totalStages = 8) {
-    return this.goToStage(this.state.currentStage + 1, totalStages);
+  nextStage() {
+    return this.goToStage(this.state.currentStage + 1);
+  },
+  prevStage() {
+    return this.goToStage(this.state.currentStage - 1);
+  },
+  isFirstStage() {
+    return this.state.currentStage === 0;
+  },
+  isLastStage() {
+    return this.state.currentStage === TOTAL_STAGES - 1;
   },
 
-  prevStage(totalStages = 8) {
-    return this.goToStage(this.state.currentStage - 1, totalStages);
+  /** Returns the stage id string (e.g. "walkA") for the current stage. */
+  currentStageId() {
+    return BUILT_IN_STAGE_IDS[this.state.currentStage] ?? null;
+  },
+
+  /** 0–1 fraction for a progress bar. */
+  progress() {
+    return this.state.currentStage / (TOTAL_STAGES - 1);
   },
 
   submitPrediction(option, correctOption) {
@@ -69,10 +72,9 @@ export const LessonController = {
   },
 
   resetForCase(caseId, options = {}) {
-    const nextState = createBaseState();
-    nextState.caseId = caseId;
-    nextState.isCustomGrammar = Boolean(options.isCustomGrammar);
-    this.state = nextState;
+    this.state = createBaseState();
+    this.state.caseId = caseId;
+    this.state.isCustomGrammar = Boolean(options.isCustomGrammar);
     return this.state;
   },
 };

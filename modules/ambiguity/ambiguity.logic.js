@@ -7,7 +7,16 @@
 import { ambiguityCases } from "../../data/ambiguity.data.js";
 import { getQuizItems, hasValidQuizSchema } from "./ambiguity.quiz.js";
 
-const BUILT_IN_STAGE_IDS = ["setup", "prediction", "walkA", "walkB", "split", "diagnosis", "fix", "practice"];
+const BUILT_IN_STAGE_IDS = [
+  "setup",
+  "prediction",
+  "walkA",
+  "walkB",
+  "split",
+  "diagnosis",
+  "fix",
+  "practice",
+];
 
 function hasValidInterpretations(interpretations) {
   if (!interpretations || typeof interpretations !== "object") {
@@ -121,7 +130,9 @@ function tokenizeBranch(branch, nonTerminalList) {
       continue;
     }
 
-    const matchedNonTerminal = nonTerminalList.find((symbol) => branch.startsWith(symbol, cursor));
+    const matchedNonTerminal = nonTerminalList.find((symbol) =>
+      branch.startsWith(symbol, cursor),
+    );
     if (matchedNonTerminal) {
       symbols.push(matchedNonTerminal);
       cursor += matchedNonTerminal.length;
@@ -135,7 +146,10 @@ function tokenizeBranch(branch, nonTerminalList) {
     }
 
     let nextCursor = cursor;
-    while (nextCursor < branch.length && /[A-Za-z0-9_]/.test(branch[nextCursor])) {
+    while (
+      nextCursor < branch.length &&
+      /[A-Za-z0-9_]/.test(branch[nextCursor])
+    ) {
       nextCursor++;
     }
 
@@ -166,8 +180,13 @@ function parseGrammar(grammar) {
 
   rules.forEach((rule) => {
     const [leftSide, rightSide] = rule.split("->").map((part) => part.trim());
-    const branches = rightSide.split("|").map((branch) => branch.trim()).filter(Boolean);
-    productions[leftSide] = branches.map((branch) => tokenizeBranch(branch, nonTerminalList));
+    const branches = rightSide
+      .split("|")
+      .map((branch) => branch.trim())
+      .filter(Boolean);
+    productions[leftSide] = branches.map((branch) =>
+      tokenizeBranch(branch, nonTerminalList),
+    );
   });
 
   const terminals = new Set();
@@ -186,7 +205,9 @@ function parseGrammar(grammar) {
     productions,
     nonTerminals,
     nonTerminalList,
-    terminals: Array.from(terminals).sort((left, right) => right.length - left.length),
+    terminals: Array.from(terminals).sort(
+      (left, right) => right.length - left.length,
+    ),
   };
 }
 
@@ -205,7 +226,9 @@ function tokenizeInputString(inputString, grammarSpec) {
   let cursor = 0;
 
   while (cursor < normalizedString.length) {
-    const matchedTerminal = grammarSpec.terminals.find((terminal) => normalizedString.startsWith(terminal, cursor));
+    const matchedTerminal = grammarSpec.terminals.find((terminal) =>
+      normalizedString.startsWith(terminal, cursor),
+    );
     if (matchedTerminal) {
       tokens.push(matchedTerminal);
       cursor += matchedTerminal.length;
@@ -220,7 +243,10 @@ function tokenizeInputString(inputString, grammarSpec) {
     }
 
     let nextCursor = cursor;
-    while (nextCursor < normalizedString.length && /[A-Za-z0-9_]/.test(normalizedString[nextCursor])) {
+    while (
+      nextCursor < normalizedString.length &&
+      /[A-Za-z0-9_]/.test(normalizedString[nextCursor])
+    ) {
       nextCursor++;
     }
     tokens.push(normalizedString.slice(cursor, nextCursor));
@@ -303,7 +329,9 @@ function cloneTreeWithExpansion(node, targetId, nextChildren) {
   }
 
   if (Array.isArray(node.children)) {
-    clonedNode.children = node.children.map((child) => cloneTreeWithExpansion(child, targetId, nextChildren));
+    clonedNode.children = node.children.map((child) =>
+      cloneTreeWithExpansion(child, targetId, nextChildren),
+    );
   }
 
   return clonedNode;
@@ -322,13 +350,21 @@ function getLeafNodes(node, leaves = []) {
 }
 
 function getLeftmostPendingLeaf(root) {
-  return getLeafNodes(root).find((node) => node.kind === "nonterminal" && node.children === null) ?? null;
+  return (
+    getLeafNodes(root).find(
+      (node) => node.kind === "nonterminal" && node.children === null,
+    ) ?? null
+  );
 }
 
 function isSubsequence(sequence, target) {
   let sequenceIndex = 0;
 
-  for (let targetIndex = 0; targetIndex < target.length && sequenceIndex < sequence.length; targetIndex += 1) {
+  for (
+    let targetIndex = 0;
+    targetIndex < target.length && sequenceIndex < sequence.length;
+    targetIndex += 1
+  ) {
     if (sequence[sequenceIndex] === target[targetIndex]) {
       sequenceIndex += 1;
     }
@@ -339,7 +375,9 @@ function isSubsequence(sequence, target) {
 
 function getFixedEdgeTokens(leaves, grammarSpec) {
   const pendingIndexes = leaves
-    .map((leaf, index) => (leaf.kind === "nonterminal" && leaf.children === null ? index : -1))
+    .map((leaf, index) =>
+      leaf.kind === "nonterminal" && leaf.children === null ? index : -1,
+    )
     .filter((index) => index >= 0);
   const firstPendingIndex = pendingIndexes[0] ?? leaves.length;
   const lastPendingIndex = pendingIndexes[pendingIndexes.length - 1] ?? -1;
@@ -356,17 +394,24 @@ function getFixedEdgeTokens(leaves, grammarSpec) {
   return {
     prefix,
     suffix,
-    concrete: leaves.filter((leaf) => leaf.kind === "terminal").map((leaf) => leaf.symbol),
+    concrete: leaves
+      .filter((leaf) => leaf.kind === "terminal")
+      .map((leaf) => leaf.symbol),
   };
 }
 
 function matchesEdgeTokens(prefix, suffix, targetTokens) {
-  if (prefix.length > targetTokens.length || suffix.length > targetTokens.length) {
+  if (
+    prefix.length > targetTokens.length ||
+    suffix.length > targetTokens.length
+  ) {
     return false;
   }
 
   const targetPrefix = targetTokens.slice(0, prefix.length);
-  const targetSuffix = suffix.length ? targetTokens.slice(targetTokens.length - suffix.length) : [];
+  const targetSuffix = suffix.length
+    ? targetTokens.slice(targetTokens.length - suffix.length)
+    : [];
 
   return (
     prefix.every((token, index) => token === targetPrefix[index]) &&
@@ -461,12 +506,16 @@ function canStillReachTarget(root, grammarSpec, targetTokens, minTokens) {
 
 function matchesTarget(root, grammarSpec, targetTokens) {
   const leaves = getLeafNodes(root);
-  const hasPendingLeaf = leaves.some((leaf) => leaf.kind === "nonterminal" && leaf.children === null);
+  const hasPendingLeaf = leaves.some(
+    (leaf) => leaf.kind === "nonterminal" && leaf.children === null,
+  );
   if (hasPendingLeaf) {
     return false;
   }
 
-  const concreteTokens = leaves.filter((leaf) => leaf.kind === "terminal").map((leaf) => leaf.symbol);
+  const concreteTokens = leaves
+    .filter((leaf) => leaf.kind === "terminal")
+    .map((leaf) => leaf.symbol);
   return (
     concreteTokens.length === targetTokens.length &&
     concreteTokens.every((token, index) => token === targetTokens[index])
@@ -488,8 +537,8 @@ function generateParseInterpretations(grammar, inputString) {
 
   const initialRoot = createNode(grammarSpec.startSymbol, "nonterminal");
   const maxInterpretations = 2;
-  const maxStates = 4000;
-  const maxExpansions = Math.max(8, targetTokens.length * 3 + 6);
+  const maxStates = 12000;
+  const maxExpansions = Math.max(12, targetTokens.length * 6 + 10);
   const queue = [
     {
       root: initialRoot,
@@ -502,11 +551,17 @@ function generateParseInterpretations(grammar, inputString) {
   const acceptedSignatures = new Set();
   let processedStates = 0;
 
-  while (queue.length && accepted.length < maxInterpretations && processedStates < maxStates) {
+  while (
+    queue.length &&
+    accepted.length < maxInterpretations &&
+    processedStates < maxStates
+  ) {
     const current = queue.shift();
     processedStates += 1;
 
-    if (!canStillReachTarget(current.root, grammarSpec, targetTokens, minTokens)) {
+    if (
+      !canStillReachTarget(current.root, grammarSpec, targetTokens, minTokens)
+    ) {
       continue;
     }
 
@@ -530,8 +585,14 @@ function generateParseInterpretations(grammar, inputString) {
 
     const branches = grammarSpec.productions[pendingLeaf.symbol] ?? [];
     branches.forEach((branch) => {
-      const nextChildren = branch.map((symbol) => createNode(symbol, classifySymbol(symbol)));
-      const nextRoot = cloneTreeWithExpansion(current.root, pendingLeaf.id, nextChildren);
+      const nextChildren = branch.map((symbol) =>
+        createNode(symbol, classifySymbol(symbol)),
+      );
+      const nextRoot = cloneTreeWithExpansion(
+        current.root,
+        pendingLeaf.id,
+        nextChildren,
+      );
       queue.push({
         root: nextRoot,
         steps: [...current.steps, formatSententialForm(nextRoot)],
@@ -548,7 +609,9 @@ function generateParseInterpretations(grammar, inputString) {
       return {
         label: `Generated parse ${index + 1}`,
         derivationSteps: entry.steps,
-        diagrams: entry.history.map((tree, stepIndex) => buildDiagramFromTree(tree, `Custom${index}_${stepIndex}`)),
+        diagrams: entry.history.map((tree, stepIndex) =>
+          buildDiagramFromTree(tree, `Custom${index}_${stepIndex}`),
+        ),
         explanation:
           "This derivation was generated from the grammar and input you submitted, and each diagram step reflects the next expansion in the parse tree.",
       };
@@ -576,11 +639,18 @@ function buildCustomCaseStudy(grammar, inputString) {
   const normalizedGrammar = normalizeGrammar(grammar);
   const normalizedString = normalizeInputString(inputString);
   const renderedString = normalizedString || "epsilon";
-  const generated = generateParseInterpretations(normalizedGrammar, normalizedString);
+  const generated = generateParseInterpretations(
+    normalizedGrammar,
+    normalizedString,
+  );
   const startSymbol = generated.grammarSpec.startSymbol;
   const interpretationA =
     generated.interpretations[0] ??
-    buildEmptyInterpretation("No derivation found for the submitted input.", startSymbol, "CustomMissingA");
+    buildEmptyInterpretation(
+      "No derivation found for the submitted input.",
+      startSymbol,
+      "CustomMissingA",
+    );
   const interpretationB =
     generated.interpretations[1] ??
     buildEmptyInterpretation(
@@ -620,27 +690,37 @@ function buildCustomCaseStudy(grammar, inputString) {
     {
       id: "setup",
       title: "Setup",
-      prompt: "This panel is using generated content because the grammar and string do not match one of the built-in authored case studies.",
+      prompt:
+        "This panel is using generated content because the grammar and string do not match one of the built-in authored case studies.",
       spotlight: normalizedGrammar.split("\n").slice(0, 3),
-      callout: "Generated mode focuses on structure and derivability rather than pre-written teaching copy.",
+      callout:
+        "Generated mode focuses on structure and derivability rather than pre-written teaching copy.",
     },
     {
       id: "prediction",
       title: "Make A Prediction",
-      prompt: "How many parse trees do you think this grammar has for the submitted input?",
+      prompt:
+        "How many parse trees do you think this grammar has for the submitted input?",
       spotlight: normalizedGrammar.split("\n").slice(0, 3),
       callout: "Prediction remains available even for custom grammars.",
       options: ["At least two distinct parses", "Exactly one parse or none"],
-      correctOption: interpretationCount >= 2 ? "At least two distinct parses" : "Exactly one parse or none",
-      feedbackCorrect: "That matches what the generated analysis found for this grammar and input.",
-      feedbackWrong: "The generated analysis found a different derivation count than your prediction.",
+      correctOption:
+        interpretationCount >= 2
+          ? "At least two distinct parses"
+          : "Exactly one parse or none",
+      feedbackCorrect:
+        "That matches what the generated analysis found for this grammar and input.",
+      feedbackWrong:
+        "The generated analysis found a different derivation count than your prediction.",
     },
     {
       id: "walkA",
       title: "Walkthrough A",
-      prompt: "This walkthrough shows the first generated derivation found for your grammar and input.",
+      prompt:
+        "This walkthrough shows the first generated derivation found for your grammar and input.",
       spotlight: normalizedGrammar.split("\n").slice(0, 3),
-      callout: "Generated derivations do not include authored semantic commentary.",
+      callout:
+        "Generated derivations do not include authored semantic commentary.",
     },
     {
       id: "walkB",
@@ -678,16 +758,20 @@ function buildCustomCaseStudy(grammar, inputString) {
     {
       id: "fix",
       title: "Repair The Grammar",
-      prompt: "A generated grammar fix walkthrough is not available for custom grammars, but the simulator can still show where structural ambiguity appears.",
+      prompt:
+        "A generated grammar fix walkthrough is not available for custom grammars, but the simulator can still show where structural ambiguity appears.",
       spotlight: normalizedGrammar.split("\n").slice(0, 3),
-      callout: "Use the divergence point to decide which productions should be constrained.",
+      callout:
+        "Use the divergence point to decide which productions should be constrained.",
     },
     {
       id: "practice",
       title: "Practice",
-      prompt: "Use the generic checkpoint below to test whether you can explain the ambiguity in your own grammar.",
+      prompt:
+        "Use the generic checkpoint below to test whether you can explain the ambiguity in your own grammar.",
       spotlight: normalizedGrammar.split("\n").slice(0, 3),
-      callout: "Built-in authored quizzes are only available for the curated case studies.",
+      callout:
+        "Built-in authored quizzes are only available for the curated case studies.",
     },
   ];
 
@@ -715,7 +799,25 @@ function buildCustomCaseStudy(grammar, inputString) {
       a: interpretationA,
       b: interpretationB,
     },
-    quiz: [],
+    // Inside buildCustomCaseStudy, replace:  quiz: [],
+    // With:
+    quiz:
+      interpretationCount >= 2
+        ? [
+            {
+              type: "mcq",
+              question: `Is the grammar ambiguous for the input "${renderedString}"?`,
+              options: [
+                "Yes — multiple parse trees exist",
+                "No — only one parse tree exists",
+              ],
+              answer: "Yes — multiple parse trees exist",
+              hint: "Count the number of distinct derivations found by the simulator.",
+              explanation:
+                "The simulator found at least two distinct parse trees for this input, confirming the grammar is ambiguous.",
+            },
+          ]
+        : [],
     isCustomGrammar: true,
   };
 }
@@ -748,7 +850,9 @@ function isValidSymbol(symbol) {
 }
 
 function isValidProductionToken(token) {
-  return /^[A-Za-z][A-Za-z0-9_]*$/.test(token) || /^[^A-Za-z0-9\s]$/.test(token);
+  return (
+    /^[A-Za-z][A-Za-z0-9_]*$/.test(token) || /^[^A-Za-z0-9\s]$/.test(token)
+  );
 }
 
 export function validateGrammarInput(grammar) {
@@ -774,7 +878,9 @@ export function validateGrammarInput(grammar) {
   }
 
   for (const rule of rules) {
-    const [leftSide, rightSide, ...extraParts] = rule.split("->").map((part) => part.trim());
+    const [leftSide, rightSide, ...extraParts] = rule
+      .split("->")
+      .map((part) => part.trim());
 
     if (extraParts.length || !leftSide || !rightSide) {
       return {
@@ -790,7 +896,10 @@ export function validateGrammarInput(grammar) {
       };
     }
 
-    const branches = rightSide.split("|").map((branch) => branch.trim()).filter(Boolean);
+    const branches = rightSide
+      .split("|")
+      .map((branch) => branch.trim())
+      .filter(Boolean);
 
     if (!branches.length) {
       return {
@@ -809,7 +918,9 @@ export function validateGrammarInput(grammar) {
         };
       }
 
-      const hasInvalidToken = tokens.some((token) => !isValidProductionToken(token) && token !== "epsilon");
+      const hasInvalidToken = tokens.some(
+        (token) => !isValidProductionToken(token) && token !== "epsilon",
+      );
       if (hasInvalidToken) {
         return {
           isValid: false,
@@ -826,7 +937,11 @@ export function validateGrammarInput(grammar) {
 }
 
 export function getDerivationSteps(caseStudy, panelKey) {
-  if (!caseStudy || !caseStudy.interpretations || !caseStudy.interpretations[panelKey]) {
+  if (
+    !caseStudy ||
+    !caseStudy.interpretations ||
+    !caseStudy.interpretations[panelKey]
+  ) {
     return [];
   }
 
@@ -834,7 +949,11 @@ export function getDerivationSteps(caseStudy, panelKey) {
 }
 
 export function getDiagramSteps(caseStudy, panelKey) {
-  if (!caseStudy || !caseStudy.interpretations || !caseStudy.interpretations[panelKey]) {
+  if (
+    !caseStudy ||
+    !caseStudy.interpretations ||
+    !caseStudy.interpretations[panelKey]
+  ) {
     return [];
   }
 
@@ -856,19 +975,20 @@ export function getFixSummary(caseStudy) {
 export function isValidCaseStudy(caseStudy) {
   return Boolean(
     caseStudy &&
-      typeof caseStudy.id === "string" &&
-      typeof caseStudy.title === "string" &&
-      typeof caseStudy.grammar === "string" &&
-      typeof caseStudy.string === "string" &&
-      typeof caseStudy.teaser === "string" &&
-      typeof caseStudy.lesson === "string" &&
-      caseStudy.fix &&
-      typeof caseStudy.fix.explanation === "string" &&
-      Array.isArray(caseStudy.fix.grammar) &&
-      Array.isArray(caseStudy.fix.walkthrough) &&
-      Array.isArray(caseStudy.fix.removedRules) &&
-      hasValidStages(caseStudy.stages) &&
-      hasValidInterpretations(caseStudy.interpretations) &&
-      hasValidQuizSchema(caseStudy),
+    typeof caseStudy.id === "string" &&
+    typeof caseStudy.title === "string" &&
+    typeof caseStudy.grammar === "string" &&
+    typeof caseStudy.string === "string" &&
+    typeof caseStudy.teaser === "string" &&
+    typeof caseStudy.lesson === "string" &&
+    caseStudy.fix &&
+    typeof caseStudy.fix.explanation === "string" &&
+    Array.isArray(caseStudy.fix.grammar) &&
+    Array.isArray(caseStudy.fix.walkthrough) &&
+    Array.isArray(caseStudy.fix.removedRules) &&
+    hasValidStages(caseStudy.stages) &&
+    hasValidInterpretations(caseStudy.interpretations) &&
+    hasValidQuizSchema(caseStudy),
   );
 }
+
