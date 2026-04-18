@@ -93,6 +93,16 @@ function parseDiagramGraph(diagram) {
   return { nodes, edges };
 }
 
+function findDivergenceStep(caseStudy) {
+  const stepsA = getDerivationSteps(caseStudy, "a");
+  const stepsB = getDerivationSteps(caseStudy, "b");
+  const minLength = Math.min(stepsA.length, stepsB.length);
+  for (let i = 0; i < minLength; i++) {
+    if (stepsA[i] !== stepsB[i]) return i;
+  }
+  return null;
+}
+
 function analyzeDiagramTransition(previousDiagram, currentDiagram) {
   const currentGraph = parseDiagramGraph(currentDiagram);
   const previousGraph = previousDiagram
@@ -392,7 +402,17 @@ async function renderDerivationPanels(ui, caseStudy, specificPanelKey = null) {
     }
   });
 
-  return Promise.all(routines);
+  return Promise.all(routines).then((results) => {
+    const divergenceStep = findDivergenceStep(caseStudy);
+    PANEL_KEYS.forEach((key) => {
+      ui.renderDivergenceMarker(
+        key,
+        divergenceStep,
+        state.derivation[key].currentStep,
+      );
+    });
+    return results;
+  });
 }
 
 function startDerivationPlayback(panelKey, ui) {
@@ -484,6 +504,13 @@ async function renderCase(ui) {
   }
 
   ui.renderCase(state.currentCaseKey, caseStudy, state.progress);
+  const interpretationCount = caseStudy.isCustomGrammar
+    ? (caseStudy.interpretations?.b?.label?.includes("not found") ||
+       caseStudy.interpretations?.b?.label?.includes("not available")
+        ? 1
+        : 2)
+    : null;
+  ui.renderAmbiguityBadge(interpretationCount);
   ui.renderEditableInput(state.editableGrammar, state.editableString);
   ui.renderProgress(state.progress);
   configureMermaid(state.theme);

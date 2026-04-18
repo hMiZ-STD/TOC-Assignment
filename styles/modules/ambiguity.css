@@ -160,6 +160,54 @@
   display: none;
 }
 
+.ambiguity-badge {
+  display: inline-block;
+  margin-top: var(--space-2);
+  padding: var(--space-1) var(--space-3);
+  border-radius: var(--radius-full);
+  font-size: var(--text-xs);
+  font-weight: 500;
+}
+
+.ambiguity-badge.is-hidden {
+  display: none;
+}
+
+.ambiguity-badge.is-ambiguous {
+  background: var(--color-warning-highlight);
+  color: var(--color-warning);
+  border: 1px solid var(--color-warning);
+}
+
+.ambiguity-badge.is-unambiguous {
+  background: var(--color-success-highlight);
+  color: var(--color-success);
+  border: 1px solid var(--color-success);
+}
+
+.divergence-marker {
+  display: inline-block;
+  margin-left: var(--space-2);
+  padding: var(--space-1) var(--space-2);
+  border-radius: var(--radius-full);
+  font-size: var(--text-xs);
+  font-weight: 600;
+  vertical-align: middle;
+  animation: diverge-pop 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.divergence-marker.is-exact {
+  background: var(--color-warning-highlight);
+  color: var(--color-warning);
+  border: 1px solid var(--color-warning);
+}
+
+.divergence-marker.is-past {
+  background: var(--color-surface-offset);
+  color: var(--color-text-muted);
+  border: 1px solid var(--color-border);
+}
+
 @keyframes node-pop {
   0% {
     transform: scale(0.8);
@@ -192,6 +240,18 @@
   }
 
   to {
+    opacity: 1;
+  }
+}
+
+@keyframes diverge-pop {
+  from {
+    transform: scale(0.8);
+    opacity: 0;
+  }
+
+  to {
+    transform: scale(1);
     opacity: 1;
   }
 }

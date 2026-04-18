@@ -118,6 +118,7 @@ export function createAmbiguityUI(root, handlers) {
     progressQuizAttempted: root.querySelector("#progress-quiz-attempted"),
     progressReset: root.querySelector("#progress-reset"),
     grammarDisplay: root.querySelector("#grammar-display"),
+    ambiguityBadge: root.querySelector("#ambiguity-badge"),
     stringDisplay: root.querySelector("#string-display"),
     caseTeaser: root.querySelector("#case-teaser"),
     appError: root.querySelector("#app-error"),
@@ -362,6 +363,28 @@ export function createAmbiguityUI(root, handlers) {
     el.stepTexts[panelKey].textContent = stepText;
   }
 
+  function renderDivergenceMarker(panelKey, divergenceStep, currentStep) {
+    const counter = el.stepCounters[panelKey];
+    if (!counter) return;
+
+    counter.querySelector(".divergence-marker")?.remove();
+
+    if (divergenceStep === null || divergenceStep === undefined) return;
+
+    const isAtOrPastDivergence = currentStep >= divergenceStep;
+    const isExactlyAtDivergence = currentStep === divergenceStep;
+
+    if (!isAtOrPastDivergence) return;
+
+    const marker = document.createElement("span");
+    marker.className = `divergence-marker ${isExactlyAtDivergence ? "is-exact" : "is-past"}`;
+    marker.setAttribute("aria-label", `Trees diverge at step ${divergenceStep + 1}`);
+    marker.textContent = isExactlyAtDivergence
+      ? "⚡ Trees diverge here"
+      : `⚡ Diverged at step ${divergenceStep + 1}`;
+    counter.appendChild(marker);
+  }
+
   function renderCompareMode(isCompareMode) {
     el.compareToggle.checked = isCompareMode;
     el.panels[PANEL_KEYS[1]]?.classList.toggle("is-hidden", !isCompareMode);
@@ -514,6 +537,19 @@ export function createAmbiguityUI(root, handlers) {
     });
   }
 
+  function renderAmbiguityBadge(interpretationCount) {
+    if (!el.ambiguityBadge) return;
+    if (interpretationCount === null || interpretationCount === undefined) {
+      el.ambiguityBadge.className = "ambiguity-badge is-hidden";
+      return;
+    }
+    const isAmbiguous = interpretationCount >= 2;
+    el.ambiguityBadge.className = `ambiguity-badge ${isAmbiguous ? "is-ambiguous" : "is-unambiguous"}`;
+    el.ambiguityBadge.textContent = isAmbiguous
+      ? `⚠️ Ambiguous — ${interpretationCount} parse trees found`
+      : "✅ Unambiguous — only 1 parse tree found";
+  }
+
   return {
     renderCase,
     renderCompareMode,
@@ -532,6 +568,8 @@ export function createAmbiguityUI(root, handlers) {
     renderLessonStage,
     showLoadingState,
     renderPanelDiagram,
+    renderAmbiguityBadge,
+    renderDivergenceMarker,
     getDiagramStage,
     renderRuleCallout,
     clearRuleCallout,
