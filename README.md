@@ -23,13 +23,7 @@ two completely different parse trees for the same input and ruins your entire co
 ---
 
 ## 🎬 Live Demo
-
-> *Replace this block with a real screenshot or GIF of the simulator running.*
-
-> To add a real screenshot: record a GIF using [LICEcap](https://www.cockos.com/licecap/) or [ScreenToGif](https://www.screentogif.com/), drop it in the repo as `demo.gif`, then replace the block above with:
-> ```md
-> ![CFG Ambiguity Simulator Demo](./demo.gif)
-> ```
+[**🚀 Live Demo**](https://hMiZ-STD.github.io/TOC-Assignment/)
 
 ---
 
