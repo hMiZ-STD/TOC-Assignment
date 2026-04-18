@@ -10,6 +10,8 @@
     <link rel="stylesheet" href="./styles/modules/ambiguity.css" />
   </head>
   <body>
+    <a class="skip-link" href="#main-content">Skip to main content</a>
+
     <!-- Animated dark background - only visible in dark mode -->
     <canvas id="star-canvas" aria-hidden="true"></canvas>
 
@@ -29,32 +31,44 @@
             class="nav-button is-active"
             type="button"
             data-case-key="precedence"
-          ></button>
+          >
+            <span class="nav-button-title">Operator Precedence Trap</span>
+          </button>
           <button
             class="nav-button"
             type="button"
             data-case-key="dangling"
-          ></button>
+          >
+            <span class="nav-button-title">Dangling Else Problem</span>
+          </button>
           <button
             class="nav-button"
             type="button"
             data-case-key="epsilon"
-          ></button>
+          >
+            <span class="nav-button-title">Epsilon Loop Structure</span>
+          </button>
           <button
             class="nav-button"
             type="button"
             data-case-key="associativity"
-          ></button>
+          >
+            <span class="nav-button-title">Arithmetic Associativity</span>
+          </button>
           <button
             class="nav-button"
             type="button"
             data-case-key="concatenation"
-          ></button>
+          >
+            <span class="nav-button-title">Nested Concatenation</span>
+          </button>
           <button
             class="nav-button"
             type="button"
             data-case-key="language"
-          ></button>
+          >
+            <span class="nav-button-title">Natural Language</span>
+          </button>
         </nav>
       </aside>
 
@@ -127,6 +141,7 @@
               role="progressbar"
               aria-valuemin="0"
               aria-valuemax="100"
+              aria-valuenow="0"
             >
               <div
                 id="lesson-progress-fill"
@@ -179,7 +194,7 @@
                   rows="4"
                   spellcheck="false"
                   aria-describedby="grammar-error"
-                ></textarea>
+                >E -> E + E | E * E | id</textarea>
               </label>
               <section
                 id="grammar-error"

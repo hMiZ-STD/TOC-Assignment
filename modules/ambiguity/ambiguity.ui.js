@@ -409,6 +409,9 @@ export function createAmbiguityUI(root, handlers) {
     el.compareToggle.checked = isCompareMode;
     el.panels[PANEL_KEYS[1]]?.classList.toggle("is-hidden", !isCompareMode);
     el.canvasArea?.classList.toggle("is-single", !isCompareMode);
+    if (isCompareMode) {
+      el.panels[PANEL_KEYS[0]]?.classList.remove("is-hidden");
+    }
     // On mobile, only show tabs when compare mode is active
     Object.values(el.mobileTabs).forEach((tab) => {
       tab?.classList.toggle("is-hidden", !isCompareMode);
@@ -536,7 +539,9 @@ export function createAmbiguityUI(root, handlers) {
     if (el.lessonPrev) el.lessonPrev.disabled = isFirst;
     if (el.lessonNext) el.lessonNext.textContent = isLast ? "Finish" : "Next →";
     if (el.lessonProgress) {
-      el.lessonProgress.style.width = `${Math.round(progressFraction * 100)}%`;
+      const pct = Math.round(progressFraction * 100);
+      el.lessonProgress.style.width = `${pct}%`;
+      el.lessonProgress.parentElement?.setAttribute("aria-valuenow", String(pct));
     }
   }
 
