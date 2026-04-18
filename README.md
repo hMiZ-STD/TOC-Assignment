@@ -37,8 +37,6 @@ You are wrong.
 
 This simulator shows you **exactly why you're wrong** — step by step, with animated parse trees, side-by-side derivations, a guided lesson, and a quiz at the end to confirm that you now understand the thing you were wrong about.
 
-It works entirely in the browser. No backend. No bundler. No `node_modules` folder that weighs more than your OS. You can literally `python -m http.server` it and go.
-
 ---
 
 ## 📚 The Six Cases That Will Change You
