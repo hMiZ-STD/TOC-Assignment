@@ -462,3 +462,46 @@ textarea.text-input {
   border-color: var(--color-error, #a12c7b);
   color: var(--color-error, #a12c7b);
 }
+
+/* - Star canvas background - */
+#star-canvas {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+  pointer-events: none;
+  display: none;
+}
+
+/* Lift all content above the canvas */
+body > *:not(#star-canvas) {
+  position: relative;
+  z-index: 1;
+}
+
+/* Dark mode surface shimmer - subtle glow on cards */
+[data-theme="dark"] .card-surface {
+  background: linear-gradient(135deg, hsl(0 0% 7%) 0%, hsl(0 0% 5%) 100%);
+  border-color: hsl(0 0% 18%);
+  box-shadow: 0 0 0 0.5px hsl(0 0% 22%), var(--shadow-card);
+}
+
+/* Active nav button glows in dark mode */
+[data-theme="dark"] .nav-button.is-active {
+  background: hsl(230 50% 14%);
+  border-color: hsl(230 85% 68%);
+  box-shadow: 0 0 12px hsl(230 85% 68% / 0.2);
+}
+
+/* Accent text glow */
+[data-theme="dark"] .mono-block {
+  color: hsl(230 85% 72%);
+  text-shadow: 0 0 12px hsl(230 85% 68% / 0.35);
+}
+
+/* Glossary term glow */
+[data-theme="dark"] .glossary-term {
+  color: hsl(230 85% 72%);
+  border-bottom-color: hsl(230 85% 68% / 0.5);
+}

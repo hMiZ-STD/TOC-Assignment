@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" data-theme="dark">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -10,8 +10,8 @@
     <link rel="stylesheet" href="./styles/modules/ambiguity.css" />
   </head>
   <body>
-    <!-- Skip link for keyboard/screen reader users -->
-    <a class="skip-link" href="#main-content">Skip to main content</a>
+    <!-- Animated dark background - only visible in dark mode -->
+    <canvas id="star-canvas" aria-hidden="true"></canvas>
 
     <div class="app-shell" data-app-root>
       <aside class="sidebar">
@@ -89,14 +89,6 @@
               <span id="speed-label">1×</span>
             </label>
 
-            <button
-              id="theme-toggle"
-              class="action-button"
-              type="button"
-              aria-pressed="false"
-            >
-              Switch to dark theme
-            </button>
           </div>
         </section>
 
@@ -420,5 +412,68 @@
     </div>
 
     <script type="module" src="./app.js"></script>
+    <script>
+      (function () {
+        const canvas = document.getElementById("star-canvas");
+        if (!canvas) return;
+        const ctx = canvas.getContext("2d");
+        let W, H, stars = [], animId;
+        const COUNT = 160;
+
+        function Star() {
+          this.reset = function () {
+            this.x = Math.random() * W;
+            this.y = Math.random() * H;
+            this.r = Math.random() * 1.2 + 0.2;
+            this.alpha = Math.random() * 0.7 + 0.15;
+            this.speed = Math.random() * 0.25 + 0.05;
+            this.twinkleSpeed = Math.random() * 0.012 + 0.004;
+            this.twinkleOffset = Math.random() * Math.PI * 2;
+          };
+          this.reset();
+        }
+
+        function resize() {
+          W = canvas.width = window.innerWidth;
+          H = canvas.height = window.innerHeight;
+        }
+
+        function init() {
+          resize();
+          stars = Array.from({ length: COUNT }, () => new Star());
+        }
+
+        function draw(t) {
+          ctx.clearRect(0, 0, W, H);
+          stars.forEach((s) => {
+            const twinkle = s.alpha + Math.sin(t * s.twinkleSpeed + s.twinkleOffset) * 0.18;
+            ctx.beginPath();
+            ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
+            ctx.fillStyle = `rgba(255,255,255,${Math.max(0, twinkle)})`;
+            ctx.fill();
+            s.y -= s.speed;
+            if (s.y < -2) {
+              s.y = H + 2;
+              s.x = Math.random() * W;
+            }
+          });
+        }
+
+        function loop(t) {
+          if (document.documentElement.getAttribute("data-theme") === "dark") {
+            canvas.style.display = "block";
+            draw(t);
+          } else {
+            canvas.style.display = "none";
+            ctx.clearRect(0, 0, W, H);
+          }
+          animId = requestAnimationFrame(loop);
+        }
+
+        window.addEventListener("resize", resize);
+        init();
+        requestAnimationFrame(loop);
+      })();
+    </script>
   </body>
 </html>

@@ -124,7 +124,6 @@ export function createAmbiguityUI(root, handlers) {
     appError: root.querySelector("#app-error"),
     canvasArea: root.querySelector("#canvas-area"),
     compareToggle: root.querySelector("#compare-mode"),
-    themeToggle: root.querySelector("#theme-toggle"),
     speedSlider: root.querySelector("#speed-slider"),
     speedLabel: root.querySelector("#speed-label"),
     // Lesson stage bar
@@ -195,8 +194,6 @@ export function createAmbiguityUI(root, handlers) {
   el.compareToggle?.addEventListener("change", (event) => {
     handlers.onCompareModeChange(event.target.checked);
   });
-
-  el.themeToggle?.addEventListener("click", () => handlers.onThemeToggle());
 
   el.grammarForm?.addEventListener("submit", (event) => {
     event.preventDefault();
@@ -395,16 +392,6 @@ export function createAmbiguityUI(root, handlers) {
     });
   }
 
-  function renderTheme(theme) {
-    const isDark = theme === "dark";
-    el.themeToggle?.setAttribute("aria-pressed", String(isDark));
-    if (el.themeToggle) {
-      el.themeToggle.textContent = isDark
-        ? "Switch to light theme"
-        : "Switch to dark theme";
-    }
-  }
-
   function renderGlobalError(message) {
     message ? showError(el.appError, message) : clearError(el.appError);
   }
@@ -553,7 +540,6 @@ export function createAmbiguityUI(root, handlers) {
   return {
     renderCase,
     renderCompareMode,
-    renderTheme,
     renderDerivation,
     renderGlobalError,
     renderEditableInput,

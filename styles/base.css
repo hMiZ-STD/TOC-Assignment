@@ -1,25 +1,44 @@
 :root {
-  --color-page: hsl(210 20% 97%);
+  /* SF Pro font stack - uses system SF Pro on Apple, falls back to Inter on others */
+  --font-sans: "SF Pro Display", "SF Pro Text", -apple-system, BlinkMacSystemFont,
+    "Inter", "Segoe UI", sans-serif;
+  --font-mono: "SF Mono", "Fira Code", "Cascadia Code", "Courier New", monospace;
+
+  /* Surfaces - clean cool white */
+  --color-page: hsl(220 20% 97%);
   --color-surface: hsl(0 0% 100%);
-  --color-surface-alt: hsl(210 25% 94%);
-  --color-border: hsl(214 17% 84%);
-  --color-text: hsl(216 24% 18%);
-  --color-muted: hsl(215 14% 40%);
-  --color-accent: hsl(213 88% 48%);
-  --color-accent-soft: hsl(214 100% 95%);
-  --color-primary-highlight: hsl(213 88% 48%);
-  --color-warning-highlight: hsl(36 95% 56%);
-  --color-error-highlight: hsl(0 72% 46%);
-  --color-success-highlight: hsl(156 72% 35%);
-  --color-success: hsl(156 72% 35%);
-  --color-success-soft: hsl(156 72% 94%);
-  --color-danger: hsl(0 72% 46%);
-  --color-danger-soft: hsl(0 100% 97%);
-  --color-shadow: hsl(216 35% 18% / 0.08);
-  --font-sans: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-  --font-mono: "Courier New", Courier, monospace;
-  --radius-sm: 0.75rem;
-  --radius-md: 1rem;
+  --color-surface-alt: hsl(220 18% 94%);
+  --color-border: hsl(220 14% 88%);
+
+  /* Text */
+  --color-text: hsl(222 30% 12%);
+  --color-muted: hsl(220 14% 42%);
+
+  /* Accent - vivid indigo-blue, SF/Apple-like */
+  --color-accent: hsl(230 80% 58%);
+  --color-accent-soft: hsl(230 90% 96%);
+  --color-primary-highlight: hsl(230 80% 58%);
+
+  /* Semantic */
+  --color-warning-highlight: hsl(38 95% 52%);
+  --color-error-highlight: hsl(4 80% 52%);
+  --color-success: hsl(152 60% 32%);
+  --color-success-highlight: hsl(152 60% 32%);
+  --color-success-soft: hsl(152 60% 94%);
+  --color-danger: hsl(4 80% 52%);
+  --color-danger-soft: hsl(4 100% 97%);
+  --color-warning: hsl(38 95% 42%);
+  --color-warning-soft: hsl(38 95% 95%);
+
+  /* Shadow */
+  --color-shadow: hsl(222 35% 14% / 0.07);
+
+  /* Radius */
+  --radius-sm: 0.5rem;
+  --radius-md: 0.875rem;
+  --radius-lg: 1.25rem;
+
+  /* Spacing */
   --space-1: 0.25rem;
   --space-2: 0.5rem;
   --space-3: 0.75rem;
@@ -28,7 +47,12 @@
   --space-6: 1.5rem;
   --space-8: 2rem;
   --space-10: 2.5rem;
-  --shadow-card: 0 1rem 2rem var(--color-shadow);
+
+  /* Shadows */
+  --shadow-card: 0 2px 8px var(--color-shadow), 0 8px 24px hsl(222 35% 14% / 0.04);
+  --shadow-elevated: 0 4px 16px var(--color-shadow), 0 16px 40px hsl(222 35% 14% / 0.06);
+
+  /* Animation */
   --anim-spring-duration: 350ms;
   --anim-spring-easing: cubic-bezier(0.16, 1, 0.3, 1);
   --anim-step-delay: 120ms;
@@ -37,22 +61,32 @@
   --anim-expand-color: var(--color-warning-highlight);
   --anim-diverge-color: var(--color-error-highlight);
   --anim-fix-color: var(--color-success-highlight);
+
+  /* Transitions */
+  --transition-fast: 150ms cubic-bezier(0.16, 1, 0.3, 1);
+  --transition-base: 220ms cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 :root[data-theme="dark"] {
-  --color-page: hsl(220 27% 10%);
-  --color-surface: hsl(220 22% 16%);
-  --color-surface-alt: hsl(220 22% 20%);
-  --color-border: hsl(219 16% 30%);
-  --color-text: hsl(210 25% 96%);
-  --color-muted: hsl(215 20% 74%);
-  --color-accent: hsl(200 88% 58%);
-  --color-accent-soft: hsl(205 60% 20%);
-  --color-success: hsl(156 65% 58%);
-  --color-success-soft: hsl(156 37% 20%);
-  --color-danger: hsl(0 78% 65%);
-  --color-danger-soft: hsl(0 38% 22%);
-  --color-shadow: hsl(220 35% 4% / 0.35);
+  --color-page: hsl(0 0% 0%);
+  --color-surface: hsl(0 0% 6%);
+  --color-surface-alt: hsl(0 0% 10%);
+  --color-border: hsl(0 0% 16%);
+  --color-text: hsl(0 0% 96%);
+  --color-muted: hsl(0 0% 56%);
+
+  --color-accent: hsl(230 85% 68%);
+  --color-accent-soft: hsl(230 50% 14%);
+
+  --color-success: hsl(152 58% 52%);
+  --color-success-soft: hsl(152 35% 10%);
+  --color-danger: hsl(4 82% 64%);
+  --color-danger-soft: hsl(4 40% 12%);
+  --color-warning: hsl(38 90% 58%);
+
+  --color-shadow: hsl(0 0% 0% / 0.6);
+  --shadow-card: 0 2px 8px var(--color-shadow), 0 8px 24px hsl(0 0% 0% / 0.4);
+  --shadow-elevated: 0 4px 16px var(--color-shadow), 0 16px 40px hsl(0 0% 0% / 0.5);
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -68,6 +102,9 @@
 
 html {
   min-width: 23.4375rem;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
 }
 
 body {
@@ -76,7 +113,9 @@ body {
   background: var(--color-page);
   color: var(--color-text);
   font-family: var(--font-sans);
-  line-height: 1.5;
+  font-size: 0.9375rem;
+  line-height: 1.55;
+  letter-spacing: -0.01em;
 }
 
 button,

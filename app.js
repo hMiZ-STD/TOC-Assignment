@@ -10,7 +10,6 @@ import {
   configureMermaid,
   renderMermaidDiagram,
 } from "./core/mermaid-wrapper.js";
-import { applyTheme, getInitialTheme } from "./core/theme.js";
 import { LessonController } from "./core/lesson-controller.js";
 import { PANEL_KEYS, PLAYBACK_INTERVAL_MS } from "./core/constants.js";
 import {
@@ -40,7 +39,6 @@ import {
   resetDerivationState,
   resetPracticeState,
   state,
-  toggleTheme,
   markCaseCompleted,
 } from "./core/state.js";
 import { createAmbiguityUI } from "./modules/ambiguity/ambiguity.ui.js";
@@ -528,10 +526,8 @@ function startApp() {
   const root = document.querySelector("[data-app-root]");
   if (!root) return;
 
-  // Initialise theme from stored preference / system preference
-  const initialTheme = getInitialTheme();
-  state.theme = initialTheme;
-  applyTheme(initialTheme);
+  state.theme = "dark";
+  document.documentElement.setAttribute("data-theme", "dark");
 
   const availableKeys = listCaseKeys();
   if (!availableKeys.includes(state.currentCaseKey)) {
@@ -569,13 +565,6 @@ function startApp() {
     onCompareModeChange(value) {
       setCompareMode(value);
       ambiguityUI.renderCompareMode(state.isCompareMode);
-    },
-
-    onThemeToggle() {
-      toggleTheme();
-      applyTheme(state.theme);
-      ambiguityUI.renderTheme(state.theme);
-      renderCase(ambiguityUI);
     },
 
     onGrammarSubmit({ grammar, string }) {
@@ -723,7 +712,6 @@ function startApp() {
     },
   });
 
-  ambiguityUI.renderTheme(state.theme);
   ambiguityUI.renderCompareMode(state.isCompareMode);
   renderCase(ambiguityUI);
 }
