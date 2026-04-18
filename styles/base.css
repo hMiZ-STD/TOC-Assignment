@@ -1,0 +1,90 @@
+:root {
+  --color-page: hsl(210 20% 97%);
+  --color-surface: hsl(0 0% 100%);
+  --color-surface-alt: hsl(210 25% 94%);
+  --color-border: hsl(214 17% 84%);
+  --color-text: hsl(216 24% 18%);
+  --color-muted: hsl(215 14% 40%);
+  --color-accent: hsl(213 88% 48%);
+  --color-accent-soft: hsl(214 100% 95%);
+  --color-primary-highlight: hsl(213 88% 48%);
+  --color-warning-highlight: hsl(36 95% 56%);
+  --color-error-highlight: hsl(0 72% 46%);
+  --color-success-highlight: hsl(156 72% 35%);
+  --color-success: hsl(156 72% 35%);
+  --color-success-soft: hsl(156 72% 94%);
+  --color-danger: hsl(0 72% 46%);
+  --color-danger-soft: hsl(0 100% 97%);
+  --color-shadow: hsl(216 35% 18% / 0.08);
+  --font-sans: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  --font-mono: "Courier New", Courier, monospace;
+  --radius-sm: 0.75rem;
+  --radius-md: 1rem;
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-5: 1.25rem;
+  --space-6: 1.5rem;
+  --space-8: 2rem;
+  --space-10: 2.5rem;
+  --shadow-card: 0 1rem 2rem var(--color-shadow);
+  --anim-spring-duration: 350ms;
+  --anim-spring-easing: cubic-bezier(0.16, 1, 0.3, 1);
+  --anim-step-delay: 120ms;
+  --anim-spotlight-dim: 0.25;
+  --anim-highlight-color: var(--color-primary-highlight);
+  --anim-expand-color: var(--color-warning-highlight);
+  --anim-diverge-color: var(--color-error-highlight);
+  --anim-fix-color: var(--color-success-highlight);
+}
+
+:root[data-theme="dark"] {
+  --color-page: hsl(220 27% 10%);
+  --color-surface: hsl(220 22% 16%);
+  --color-surface-alt: hsl(220 22% 20%);
+  --color-border: hsl(219 16% 30%);
+  --color-text: hsl(210 25% 96%);
+  --color-muted: hsl(215 20% 74%);
+  --color-accent: hsl(200 88% 58%);
+  --color-accent-soft: hsl(205 60% 20%);
+  --color-success: hsl(156 65% 58%);
+  --color-success-soft: hsl(156 37% 20%);
+  --color-danger: hsl(0 78% 65%);
+  --color-danger-soft: hsl(0 38% 22%);
+  --color-shadow: hsl(220 35% 4% / 0.35);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --anim-spring-duration: 0.01ms;
+    --anim-step-delay: 0ms;
+  }
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  min-width: 23.4375rem;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background: var(--color-page);
+  color: var(--color-text);
+  font-family: var(--font-sans);
+  line-height: 1.5;
+}
+
+button,
+input,
+code {
+  font: inherit;
+}
+
+button {
+  color: inherit;
+}

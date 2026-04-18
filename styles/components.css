@@ -1,0 +1,362 @@
+.card-surface {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-card);
+}
+
+.brand-block,
+.case-nav,
+.toolbar,
+.info-card,
+.interpretation-panel,
+.insight-card {
+  padding: var(--space-5);
+}
+
+.eyebrow,
+.section-label {
+  margin: 0 0 var(--space-2);
+  color: var(--color-muted);
+  font-size: 0.8125rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.brand-title,
+.toolbar h2,
+.panel-heading h3,
+.section-title {
+  margin: 0;
+}
+
+.brand-copy,
+.body-copy,
+.panel-copy {
+  margin: 0;
+  color: var(--color-muted);
+}
+
+.case-nav {
+  display: grid;
+  gap: var(--space-3);
+}
+
+.nav-button,
+.action-button {
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  background: var(--color-surface);
+  cursor: pointer;
+  transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+}
+
+button:focus-visible,
+input:focus-visible,
+textarea:focus-visible {
+  outline: 3px solid color-mix(in srgb, var(--color-accent) 60%, white);
+  outline-offset: 2px;
+}
+
+.nav-button {
+  padding: var(--space-3) var(--space-4);
+  text-align: left;
+  display: grid;
+  gap: var(--space-1);
+}
+
+.nav-button:hover,
+.action-button:hover {
+  background: var(--color-surface-alt);
+}
+
+.nav-button.is-active {
+  background: var(--color-accent-soft);
+  border-color: var(--color-accent);
+  color: var(--color-accent);
+  font-weight: 700;
+}
+
+.nav-button.is-complete:not(.is-active) {
+  border-color: var(--color-success);
+}
+
+.nav-button-title {
+  font-weight: 700;
+}
+
+.nav-button-copy {
+  color: var(--color-muted);
+  font-size: 0.9rem;
+}
+
+.toolbar {
+  display: grid;
+  gap: var(--space-4);
+}
+
+.toolbar-actions {
+  display: grid;
+  gap: var(--space-3);
+}
+
+.editor-card {
+  padding: var(--space-5);
+}
+
+.editor-header {
+  margin-bottom: var(--space-4);
+}
+
+.editor-form {
+  display: grid;
+  gap: var(--space-4);
+}
+
+.field-group {
+  display: grid;
+  gap: var(--space-2);
+}
+
+.field-label {
+  color: var(--color-muted);
+  font-weight: 600;
+}
+
+.text-input {
+  width: 100%;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  background: var(--color-surface-alt);
+  color: var(--color-text);
+  padding: var(--space-3);
+}
+
+.mono-input {
+  font-family: var(--font-mono);
+}
+
+textarea.text-input {
+  resize: vertical;
+}
+
+.editor-actions {
+  display: flex;
+  justify-content: flex-start;
+}
+
+.control-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+
+.toggle-field {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-3);
+  color: var(--color-muted);
+}
+
+.action-button {
+  padding: var(--space-3) var(--space-4);
+}
+
+.action-button:disabled {
+  cursor: not-allowed;
+  color: var(--color-muted);
+  background: var(--color-surface-alt);
+}
+
+.status-banner,
+.panel-error {
+  border-radius: var(--radius-sm);
+  background: var(--color-danger-soft);
+  border: 1px solid var(--color-danger);
+  color: var(--color-danger);
+  padding: var(--space-3) var(--space-4);
+}
+
+.is-hidden {
+  display: none;
+}
+
+.mono-block {
+  display: block;
+  font-family: var(--font-mono);
+  word-break: break-word;
+  color: var(--color-accent);
+}
+
+.glossary-term {
+  border-bottom: 1px dashed var(--color-accent);
+  color: var(--color-accent);
+  cursor: help;
+}
+
+.glossary-tooltip {
+  position: fixed;
+  z-index: 10;
+  max-width: min(18rem, calc(100vw - 2rem));
+  left: 50%;
+  bottom: 1rem;
+  transform: translateX(-50%);
+  padding: var(--space-3);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  background: var(--color-surface);
+  box-shadow: var(--shadow-card);
+}
+
+.glossary-tooltip-title,
+.glossary-tooltip-body {
+  margin: 0;
+}
+
+.glossary-tooltip-title {
+  color: var(--color-text);
+  font-weight: 700;
+}
+
+.glossary-tooltip-body {
+  margin-top: var(--space-2);
+  color: var(--color-muted);
+}
+
+.practice-card {
+  padding: var(--space-5);
+  display: grid;
+  gap: var(--space-4);
+}
+
+.practice-header,
+.practice-view,
+.practice-options {
+  display: grid;
+  gap: var(--space-3);
+}
+
+.practice-view {
+  align-content: start;
+}
+
+.practice-view.is-hidden {
+  display: none;
+}
+
+.practice-progress,
+.practice-question,
+.practice-score {
+  margin: 0;
+}
+
+.practice-progress {
+  color: var(--color-muted);
+  font-weight: 600;
+}
+
+.practice-option {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  width: 100%;
+  padding: var(--space-3);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  background: var(--color-surface-alt);
+  color: var(--color-text);
+  cursor: pointer;
+  text-align: left;
+}
+
+.practice-option.is-selected {
+  border-color: var(--color-accent);
+  background: var(--color-accent-soft);
+}
+
+.practice-actions {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  margin-top: var(--space-3);
+  padding-top: 0;
+  min-height: 0;
+}
+
+.module-view {
+  display: grid;
+  gap: var(--space-4);
+}
+
+.practice-feedback {
+  margin: 0;
+  border-radius: var(--radius-sm);
+  padding: var(--space-3);
+  line-height: 1.5;
+}
+
+#practice-feedback-view {
+  gap: var(--space-4);
+}
+
+#practice-feedback-view .practice-actions {
+  margin-top: var(--space-4);
+}
+
+.practice-feedback.is-correct {
+  background: var(--color-success-soft);
+  color: var(--color-success);
+}
+
+.practice-feedback.is-incorrect {
+  background: var(--color-danger-soft);
+  color: var(--color-danger);
+}
+
+.progress-card {
+  padding: var(--space-5);
+}
+
+.progress-grid {
+  display: grid;
+  gap: var(--space-4);
+}
+
+.progress-item {
+  padding: var(--space-3);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  background: var(--color-surface-alt);
+}
+
+.progress-value {
+  margin: 0;
+  color: var(--color-text);
+  font-weight: 700;
+}
+
+.accent-card {
+  border-color: var(--color-success);
+  background: color-mix(in srgb, var(--color-surface) 88%, var(--color-success-soft));
+}
+
+.empty-state {
+  margin: 0;
+  color: var(--color-muted);
+}
+
+@media (min-width: 48rem) {
+  .toolbar {
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: center;
+  }
+
+  .toolbar-actions {
+    justify-items: end;
+  }
+
+  .progress-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}

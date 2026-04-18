@@ -1,0 +1,202 @@
+.interpretation-panel {
+  display: grid;
+  gap: var(--space-4);
+}
+
+.interpretation-panel.is-panel-entering {
+  animation: derivation-panel-in var(--anim-spring-duration) var(--anim-spring-easing);
+}
+
+.panel-heading {
+  display: grid;
+  gap: var(--space-1);
+}
+
+.panel-label {
+  margin: 0;
+  color: var(--color-muted);
+  font-weight: 600;
+}
+
+.derivation-controls,
+.derivation-step {
+  display: grid;
+  gap: var(--space-2);
+}
+
+.step-counter {
+  margin: 0;
+  color: var(--color-muted);
+  font-weight: 600;
+}
+
+.panel-copy,
+.body-copy {
+  overflow-wrap: anywhere;
+}
+
+.practice-question,
+.practice-score {
+  font-weight: 600;
+}
+
+.diagram-stage {
+  min-height: 18rem;
+  padding: var(--space-4);
+  border-radius: var(--radius-sm);
+  background: var(--color-surface-alt);
+  overflow: auto;
+  position: relative;
+}
+
+.diagram-stage svg {
+  display: block;
+  max-width: 100%;
+  height: auto;
+  margin: 0 auto;
+}
+
+.diagram-stage .rule-callout {
+  position: absolute;
+  z-index: 2;
+  max-width: min(14rem, calc(100% - 2rem));
+  padding: var(--space-2) var(--space-3);
+  border-radius: var(--radius-sm);
+  background: var(--color-surface);
+  border: 1px solid var(--color-warning-highlight);
+  box-shadow: var(--shadow-card);
+  color: var(--color-text);
+  font-size: 0.875rem;
+  font-weight: 700;
+  pointer-events: none;
+  opacity: 0;
+  transform: translateY(8px);
+  animation: rule-callout-in var(--anim-spring-duration) var(--anim-spring-easing) forwards;
+}
+
+.diagram-stage svg g.node {
+  transition:
+    opacity var(--anim-spring-duration) ease,
+    transform var(--anim-spring-duration) var(--anim-spring-easing);
+  transform-origin: center;
+}
+
+.diagram-stage svg.has-spotlight g.node.is-dimmed {
+  opacity: var(--anim-spotlight-dim);
+}
+
+.diagram-stage svg g.node .label text,
+.diagram-stage svg g.node span.nodeLabel {
+  transition: fill var(--anim-spring-duration) ease;
+}
+
+.diagram-stage svg g.node rect,
+.diagram-stage svg g.node polygon,
+.diagram-stage svg g.node circle,
+.diagram-stage svg g.node ellipse,
+.diagram-stage svg g.node path {
+  transition:
+    fill var(--anim-spring-duration) ease,
+    stroke var(--anim-spring-duration) ease,
+    opacity var(--anim-spring-duration) ease;
+}
+
+.diagram-stage svg g.node.is-token-unresolved .label text,
+.diagram-stage svg g.node.is-token-unresolved span.nodeLabel {
+  fill: var(--color-accent);
+  font-weight: 700;
+}
+
+.diagram-stage svg g.node.is-token-expanding .label text,
+.diagram-stage svg g.node.is-token-expanding span.nodeLabel {
+  fill: var(--color-warning-highlight);
+  font-weight: 700;
+}
+
+.diagram-stage svg g.node.is-token-resolved .label text,
+.diagram-stage svg g.node.is-token-resolved span.nodeLabel {
+  fill: var(--color-muted);
+}
+
+.diagram-stage svg g.node.is-token-terminal .label text,
+.diagram-stage svg g.node.is-token-terminal span.nodeLabel {
+  fill: var(--color-text);
+  font-weight: 800;
+}
+
+.diagram-stage svg g.node.is-expanding rect,
+.diagram-stage svg g.node.is-expanding polygon,
+.diagram-stage svg g.node.is-expanding circle,
+.diagram-stage svg g.node.is-expanding ellipse,
+.diagram-stage svg g.node.is-expanding path {
+  fill: color-mix(in srgb, var(--anim-expand-color) 24%, var(--color-surface));
+  stroke: var(--anim-expand-color);
+}
+
+.diagram-stage svg g.node.is-new-child {
+  animation: node-pop var(--anim-spring-duration) var(--anim-spring-easing);
+}
+
+.diagram-stage svg g.node.is-new-child rect,
+.diagram-stage svg g.node.is-new-child polygon,
+.diagram-stage svg g.node.is-new-child circle,
+.diagram-stage svg g.node.is-new-child ellipse,
+.diagram-stage svg g.node.is-new-child path {
+  fill: color-mix(in srgb, var(--anim-highlight-color) 14%, var(--color-surface));
+  stroke: var(--anim-highlight-color);
+}
+
+.editor-card .panel-error {
+  margin: 0;
+}
+
+.canvas-grid.is-single #interp-b {
+  display: none;
+}
+
+@keyframes node-pop {
+  0% {
+    transform: scale(0.8);
+  }
+
+  65% {
+    transform: scale(1.05);
+  }
+
+  100% {
+    transform: scale(1);
+  }
+}
+
+@keyframes rule-callout-in {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes derivation-panel-in {
+  from {
+    opacity: 0.25;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .diagram-stage .rule-callout,
+  .diagram-stage svg g.node.is-new-child {
+    animation: none;
+  }
+
+  .interpretation-panel.is-panel-entering {
+    animation: none;
+  }
+}
