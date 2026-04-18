@@ -79,6 +79,7 @@ export const state = {
   },
   progress: savedProgress ?? {
     visited: [],
+    completed: [],
     quizScore: {},
     quizAttempted: {},
   },
@@ -211,4 +212,11 @@ export function clearErrors() {
   state.errors.panelA = "";
   state.errors.panelB = "";
   state.errors.grammar = "";
+}
+
+export function markCaseCompleted(caseKey) {
+  if (!state.progress.completed.includes(caseKey)) {
+    state.progress.completed = [...state.progress.completed, caseKey];
+    persistProgress();
+  }
 }

@@ -279,18 +279,22 @@ export function createAmbiguityUI(root, handlers) {
   // Render functions
   // ---------------------------------------------------------------------------
 
-  function renderCase(caseKey, caseStudy, visitedCaseKeys) {
+  function renderCase(caseKey, caseStudy, progress) {
     el.navButtons.forEach((button) => {
       const isActive = button.dataset.caseKey === caseKey;
-      const isVisited = visitedCaseKeys.includes(button.dataset.caseKey);
+      const isVisited = progress.visited.includes(button.dataset.caseKey);
+      const isCompleted = (progress.completed ?? []).includes(
+        button.dataset.caseKey,
+      );
       const title = isActive
         ? caseStudy.title
         : (CASE_TITLES[button.dataset.caseKey] ?? button.dataset.caseKey);
       const teaser = CASE_TEASERS[button.dataset.caseKey] ?? "";
       button.classList.toggle("is-active", isActive);
       button.classList.toggle("is-complete", isVisited && !isActive);
+      button.classList.toggle("is-completed", isCompleted);
       button.innerHTML = `
-        <span class="nav-button-title">${title}</span>
+        <span class="nav-button-title">${title}${isCompleted ? ' <span class="case-badge" aria-label="Completed">✅</span>' : ""}</span>
         <span class="nav-button-copy">${teaser}</span>
       `;
     });

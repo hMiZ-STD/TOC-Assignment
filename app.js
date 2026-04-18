@@ -41,6 +41,7 @@ import {
   resetPracticeState,
   state,
   toggleTheme,
+  markCaseCompleted,
 } from "./core/state.js";
 import { createAmbiguityUI } from "./modules/ambiguity/ambiguity.ui.js";
 import {
@@ -446,6 +447,12 @@ function renderLessonStage(ui, caseStudy) {
   const stage = stages[stageIndex];
   if (!stage) return;
 
+  // Mark complete when practice stage is reached
+  if (stage.id === "practice") {
+    markCaseCompleted(state.currentCaseKey);
+    ui.renderProgress(state.progress);
+  }
+
   ui.renderLessonStage(
     stage,
     stageIndex,
@@ -476,7 +483,7 @@ async function renderCase(ui) {
     return;
   }
 
-  ui.renderCase(state.currentCaseKey, caseStudy, state.progress.visited);
+  ui.renderCase(state.currentCaseKey, caseStudy, state.progress);
   ui.renderEditableInput(state.editableGrammar, state.editableString);
   ui.renderProgress(state.progress);
   configureMermaid(state.theme);
