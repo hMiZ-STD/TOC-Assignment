@@ -325,6 +325,15 @@ export function createAmbiguityUI(root, handlers) {
     animateEntry(el.panels[panelKey], "is-panel-entering");
   }
 
+  function setDiagramLoading(panelKey, isLoading) {
+    el.diagrams[panelKey]?.classList.toggle("is-loading", isLoading);
+    if (isLoading) {
+      // Clear stale SVG immediately so it doesn't ghost
+      el.diagrams[panelKey].innerHTML =
+        '<div class="diagram-loader" aria-live="polite" aria-label="Rendering diagram..."></div>';
+    }
+  }
+
   function getDiagramStage(panelKey) {
     return el.diagrams[panelKey];
   }
@@ -355,8 +364,22 @@ export function createAmbiguityUI(root, handlers) {
     el.prevBtns[panelKey].disabled = stepIndex <= 0;
     el.nextBtns[panelKey].disabled = stepIndex >= lastIndex;
     el.playBtns[panelKey].textContent = isPlaying ? "Pause" : "Play";
-    el.stepCounters[panelKey].textContent =
-      `Step ${stepIndex + 1} of ${stepTotal}`;
+
+    // Update only the text node, NOT .textContent on the whole element.
+    // Setting .textContent on the parent destroys all child nodes including
+    // the divergence-marker <span> that renderDivergenceMarker() appends.
+    const counter = el.stepCounters[panelKey];
+    let textNode = counter.querySelector(".step-counter-text");
+    if (!textNode) {
+      // First call: wrap existing text in a dedicated span so the marker
+      // sibling is never blown away by a textContent assignment.
+      textNode = document.createElement("span");
+      textNode.className = "step-counter-text";
+      counter.textContent = ""; // clear once safely
+      counter.appendChild(textNode);
+    }
+    textNode.textContent = `Step ${stepIndex + 1} of ${stepTotal}`;
+
     el.stepTexts[panelKey].textContent = stepText;
   }
 
@@ -554,6 +577,7 @@ export function createAmbiguityUI(root, handlers) {
     renderLessonStage,
     showLoadingState,
     renderPanelDiagram,
+    setDiagramLoading,
     renderAmbiguityBadge,
     renderDivergenceMarker,
     getDiagramStage,

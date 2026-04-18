@@ -13,6 +13,7 @@
   /* Text */
   --color-text: hsl(222 30% 12%);
   --color-muted: hsl(220 14% 42%);
+  --color-text-muted: hsl(220 14% 42%);
 
   /* Accent - vivid indigo-blue, SF/Apple-like */
   --color-accent: hsl(230 80% 58%);
@@ -38,6 +39,9 @@
   --radius-md: 0.875rem;
   --radius-lg: 1.25rem;
 
+  /* Type scale */
+  --text-xs: 0.75rem;
+
   /* Spacing */
   --space-1: 0.25rem;
   --space-2: 0.5rem;
@@ -51,6 +55,8 @@
   /* Shadows */
   --shadow-card: 0 2px 8px var(--color-shadow), 0 8px 24px hsl(222 35% 14% / 0.04);
   --shadow-elevated: 0 4px 16px var(--color-shadow), 0 16px 40px hsl(222 35% 14% / 0.06);
+  --color-surface-offset: hsl(220 18% 90%);
+  --color-surface-offset-2: hsl(220 18% 86%);
 
   /* Animation */
   --anim-spring-duration: 350ms;
@@ -74,6 +80,7 @@
   --color-border: hsl(0 0% 16%);
   --color-text: hsl(0 0% 96%);
   --color-muted: hsl(0 0% 56%);
+  --color-text-muted: hsl(0 0% 56%);
 
   --color-accent: hsl(230 85% 68%);
   --color-accent-soft: hsl(230 50% 14%);
@@ -83,6 +90,9 @@
   --color-danger: hsl(4 82% 64%);
   --color-danger-soft: hsl(4 40% 12%);
   --color-warning: hsl(38 90% 58%);
+  --text-xs: 0.75rem;
+  --color-surface-offset: hsl(0 0% 14%);
+  --color-surface-offset-2: hsl(0 0% 18%);
 
   --color-shadow: hsl(0 0% 0% / 0.6);
   --shadow-card: 0 2px 8px var(--color-shadow), 0 8px 24px hsl(0 0% 0% / 0.4);

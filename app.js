@@ -352,9 +352,10 @@ async function renderDerivationPanels(ui, caseStudy, specificPanelKey = null) {
   const caseSignature = `${state.currentCaseKey}::${state.editableGrammar}::${state.editableString}`;
 
   const routines = panels.map(async (panelKey) => {
+    const capturedStep = state.derivation[panelKey].currentStep;
     const steps = getDerivationSteps(caseStudy, panelKey);
     const diagramSteps = getDiagramSteps(caseStudy, panelKey);
-    const currentStep = state.derivation[panelKey].currentStep;
+    const currentStep = capturedStep;
     const previousDiagram =
       currentStep > 0 ? diagramSteps[currentStep - 1] : null;
     const analysis = analyzeDiagramTransition(
@@ -369,6 +370,7 @@ async function renderDerivationPanels(ui, caseStudy, specificPanelKey = null) {
       steps[currentStep],
       state.derivation[panelKey].isPlaying,
     );
+    ui.setDiagramLoading(panelKey, true);
 
     try {
       const svg = await renderMermaidDiagram(
@@ -379,6 +381,7 @@ async function renderDerivationPanels(ui, caseStudy, specificPanelKey = null) {
         `${state.currentCaseKey}::${state.editableGrammar}::${state.editableString}` ===
         caseSignature;
       if (stillValid) {
+        ui.setDiagramLoading(panelKey, false);
         ui.renderPanelDiagram(panelKey, svg);
         decorateRenderedDiagram(ui, panelKey, analysis);
       }
@@ -387,6 +390,7 @@ async function renderDerivationPanels(ui, caseStudy, specificPanelKey = null) {
         `${state.currentCaseKey}::${state.editableGrammar}::${state.editableString}` ===
         caseSignature;
       if (stillValid) {
+        ui.setDiagramLoading(panelKey, false);
         ui.renderPanelError(
           panelKey,
           "Diagram rendering failed for this step.",
@@ -398,15 +402,17 @@ async function renderDerivationPanels(ui, caseStudy, specificPanelKey = null) {
         ui.clearRuleCallout(panelKey);
       }
     }
+
+    return { panelKey, capturedStep };
   });
 
   return Promise.all(routines).then((results) => {
     const divergenceStep = findDivergenceStep(caseStudy);
-    PANEL_KEYS.forEach((key) => {
+    results.forEach(({ panelKey, capturedStep }) => {
       ui.renderDivergenceMarker(
-        key,
+        panelKey,
         divergenceStep,
-        state.derivation[key].currentStep,
+        capturedStep,
       );
     });
     return results;
