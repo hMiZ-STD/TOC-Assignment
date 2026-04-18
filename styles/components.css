@@ -9,8 +9,7 @@
 .case-nav,
 .toolbar,
 .info-card,
-.interpretation-panel,
-.insight-card {
+.interpretation-panel {
   padding: var(--space-5);
 }
 
@@ -337,15 +336,6 @@ textarea.text-input {
   margin: 0;
   color: var(--color-text);
   font-weight: 700;
-}
-
-.accent-card {
-  border-color: var(--color-success);
-  background: color-mix(
-    in srgb,
-    var(--color-surface) 88%,
-    var(--color-success-soft)
-  );
 }
 
 .empty-state {

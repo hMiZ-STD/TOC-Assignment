@@ -85,8 +85,6 @@ export const state = {
   },
   errors: {
     global: "",
-    panelA: "",
-    panelB: "",
     grammar: "",
   },
 };
@@ -199,18 +197,12 @@ export function clearProgress() {
   }
 }
 
-export function toggleTheme() {
-  state.theme = state.theme === "light" ? "dark" : "light";
-}
-
 export function setError(key, message) {
   state.errors[key] = message;
 }
 
 export function clearErrors() {
   state.errors.global = "";
-  state.errors.panelA = "";
-  state.errors.panelB = "";
   state.errors.grammar = "";
 }
 

@@ -6,15 +6,6 @@
 
 export const PANEL_KEYS = ["a", "b"];
 
-export const BUILT_IN_CASE_KEYS = [
-  "precedence",
-  "dangling",
-  "epsilon",
-  "associativity",
-  "concatenation",
-  "language",
-];
-
 export const BUILT_IN_STAGE_IDS = [
   "setup",
   "prediction",
@@ -29,4 +20,3 @@ export const BUILT_IN_STAGE_IDS = [
 export const PLAYBACK_INTERVAL_MS = 1200;
 export const GLOSSARY_HOVER_DELAY_MS = 200;
 export const PROGRESS_STORAGE_KEY = "toc-lab-progress";
-export const THEME_STORAGE_KEY = "toc-lab-theme";

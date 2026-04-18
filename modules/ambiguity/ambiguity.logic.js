@@ -5,18 +5,8 @@
  */
 
 import { ambiguityCases } from "../../data/ambiguity.data.js";
+import { BUILT_IN_STAGE_IDS } from "../../core/constants.js";
 import { getQuizItems, hasValidQuizSchema } from "./ambiguity.quiz.js";
-
-const BUILT_IN_STAGE_IDS = [
-  "setup",
-  "prediction",
-  "walkA",
-  "walkB",
-  "split",
-  "diagnosis",
-  "fix",
-  "practice",
-];
 
 function hasValidInterpretations(interpretations) {
   if (!interpretations || typeof interpretations !== "object") {
@@ -780,7 +770,6 @@ function buildCustomCaseStudy(grammar, inputString) {
     title,
     grammar: normalizedGrammar,
     string: renderedString,
-    inputString: renderedString,
     teaser: "Generated analysis for your own grammar and input.",
     lesson,
     fix: {
@@ -968,10 +957,6 @@ export function getLessonStages(caseStudy) {
   return caseStudy?.stages ?? [];
 }
 
-export function getFixSummary(caseStudy) {
-  return caseStudy?.fix?.explanation ?? "";
-}
-
 export function isValidCaseStudy(caseStudy) {
   return Boolean(
     caseStudy &&
@@ -991,4 +976,3 @@ export function isValidCaseStudy(caseStudy) {
     hasValidQuizSchema(caseStudy),
   );
 }
-

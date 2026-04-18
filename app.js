@@ -11,7 +11,11 @@ import {
   renderMermaidDiagram,
 } from "./core/mermaid-wrapper.js";
 import { LessonController } from "./core/lesson-controller.js";
-import { PANEL_KEYS, PLAYBACK_INTERVAL_MS } from "./core/constants.js";
+import {
+  GLOSSARY_HOVER_DELAY_MS,
+  PANEL_KEYS,
+  PLAYBACK_INTERVAL_MS,
+} from "./core/constants.js";
 import {
   clearErrors,
   clearProgress,
@@ -629,7 +633,7 @@ function startApp() {
         ambiguityUI.renderGlossaryTooltip(term, trigger);
         setGlossaryTooltipVisible(true);
         setGlossaryTooltipTimer(null);
-      }, 200);
+      }, GLOSSARY_HOVER_DELAY_MS);
       setGlossaryTooltipTimer(timerId);
     },
 

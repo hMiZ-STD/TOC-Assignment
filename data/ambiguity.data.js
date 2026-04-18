@@ -988,7 +988,6 @@ function augmentCaseStudy(caseId, caseStudy) {
   return {
     ...caseStudy,
     id: caseId,
-    inputString: caseStudy.string,
     teaser: metadata.teaser,
     stages: metadata.stages,
     fix: {
